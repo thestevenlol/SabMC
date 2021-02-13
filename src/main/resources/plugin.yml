@@ -1,0 +1,10 @@
+name: SabMC
+version: ${project.version}
+main: me.jackfoley.sab.Main
+api-version: 1.16
+authors: [ PayPahl ]
+description: Make for SabMC, with love.
+depend:
+  - Vault
+  - LuckPerms
+  - GriefPrevention
