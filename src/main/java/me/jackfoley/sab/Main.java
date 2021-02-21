@@ -52,11 +52,6 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        if (false) {
-            expiryRun(this);
-            return;
-        }
-
 
         System.out.println("================================");
         System.out.println("If the plugin is failing to load, \n" +
@@ -176,52 +171,6 @@ public final class Main extends JavaPlugin {
         return sql;
     }
 
-    private void expiryRun(Main plugin) {
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-        Date newDate = new GregorianCalendar(2021, Calendar.FEBRUARY, 20).getTime();
-
-        // todo change date
-        // todo change date
-        // todo change date
-        // todo change date
-        // todo change date
-        // todo change date
-        // todo change date
-        // todo change date
-        // todo change date
-
-
-        if (date.after(newDate)) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                System.out.println(Color.chat(
-                "&cHi Sav, Sophia, Chloe, Kira,\n" +
-                
-                "&cThis plugin will never run again.\n" +
-                "&cAll data will be wiped from the database.\n" +
-                "&cHere is why I did this:\n\n" +
-                
-                "&c- Sav, gaining my trust and friendship to use me.\n" +
-                "&c- Sophia, leaking our messages? Just why? What were you trying to achieve?\n" +
-                "&c- Kira, calling me a paedophile for playing games and talking to Gab, for making \n" +
-               "&c  sure she is okay and giving her someone to talk to about her issues.\n" +
-               "&c- Disrespecting and blatantly bullying Gab.\n\n" +
-                
-               "&cI did have good intentions coming back into this, I did want to develop for SabMC again.\n" +
-                "&cAfter I heard the things that were happening behind my back, I decided I had to\n" +
-                "&cprepare for a situation like this.\n" +
-                "&cI will be blocking Chloe, Sophia, Kira and Sav on all social media platforms.\n" +
-                "&cIf you attempt to contact me I will be ignoring it.\n" +
-                "&cI hope you all understand. \n\n" +
-                
-                "&cThis was my decision alone, nobody else influenced it.\n\n" +
-                
-                "&cBest of luck,\n" +
-                "&cJack."
-                ));
-            }, 40);
-            plugin.getPluginLoader().disablePlugin(plugin);
-        }
-    }
+   
 
 }
