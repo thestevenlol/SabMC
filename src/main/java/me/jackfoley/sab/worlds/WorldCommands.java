@@ -5,7 +5,9 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Description;
 import me.jackfoley.sab.Main;
 import me.jackfoley.sab.util.Color;
+import me.jackfoley.sab.util.LastLocationUtils;
 import me.jackfoley.sab.util.Messages;
+import me.jackfoley.sab.util.PreventCheating;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -15,22 +17,32 @@ public class WorldCommands extends BaseCommand {
     @Description("Teleport to the server hub.")
     public void hub(Player player) {
         WorldUtils.getHubLocation("hub", hub -> {
-            player.sendMessage(Color.chat(Messages.prefix + "&7Teleporting in 5 seconds..."));
-            Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
+            Bukkit.getScheduler().runTask(Main.getPlugin(), () -> {
+                if (PreventCheating.isFalling(player)) {
+                    player.sendMessage(Color.chat(Messages.prefix + "&cYou cannot teleport while you are falling."));
+                    return;
+                }
                 player.teleport(hub);
-            }, (20*5));
+            });
         });
     }
 
     @CommandAlias("survival|sur")
     @Description("Teleport to the survival world.")
     public void survival(Player player) {
-        WorldUtils.getHubLocation("survival", hub -> {
-            player.sendMessage(Color.chat(Messages.prefix + "&7Teleporting in 5 seconds..."));
-            Bukkit.getScheduler().runTaskLater(Main.getPlugin(), () -> {
-                player.teleport(hub);
-            }, (20*5));
-        });
+        WorldUtils.getHubLocation("survival", hub -> LastLocationUtils.exists(player.getUniqueId(), hasLastLocation -> LastLocationUtils.getLastLocation(player.getUniqueId(), location -> {
+            if (!hasLastLocation) {
+                Bukkit.getScheduler().runTask(Main.getPlugin(), () -> {
+                    if (PreventCheating.isFalling(player)) {
+                        player.sendMessage(Color.chat(Messages.prefix + "&cYou cannot teleport while you are falling."));
+                        return;
+                    }
+                    player.teleport(hub);
+                });
+                return;
+            }
+            Bukkit.getScheduler().runTask(Main.getPlugin(), () -> player.teleport(location));
+        })));
     }
 
 }

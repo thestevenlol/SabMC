@@ -46,7 +46,7 @@ public class ChatWorker implements Listener {
 
                                Player channelPlayer = Bukkit.getPlayer(uuid);
 
-                               TextComponent channel = new TextComponent(Color.chat("&7[&eG&7]"));
+                               TextComponent channel = new TextComponent(Color.chat("&7[&eG&7] "));
                                try {
                                    if (channelPlayer.hasPermission("sab.staff")) {
                                        channel.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Color.chat("&aAvailable channels:" +
@@ -64,6 +64,20 @@ public class ChatWorker implements Listener {
                                TextComponent message = new TextComponent(e.getMessage());
                                message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Color.chat("&cClick to report.")).create()));
                                message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/report " + player.getUniqueId() + " " + e.getMessage()));
+
+                               /*
+
+                               if (!channelPlayer.hasPermission("sab.staff")) {
+
+                               } else {
+                                   message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Color.chat("&cClick to mute.")).create()));
+                                   message.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/mute " + player.getName() + " "));
+                               }
+
+                               //todo fix, producing NPE at first if
+
+                                */
+
                                try {
                                    channelPlayer.spigot().sendMessage(channel, username, barrier2, message);
                                } catch (NullPointerException ignored) {
@@ -75,7 +89,7 @@ public class ChatWorker implements Listener {
 
                        if (c.equalsIgnoreCase("staff")) {
                            Bukkit.getOnlinePlayers().stream().filter(o -> o.hasPermission("sab.staff")).forEach(channelPlayer -> {
-                               TextComponent channel = new TextComponent(Color.chat("&7[&cStaff&7]"));
+                               TextComponent channel = new TextComponent(Color.chat("&7[&cStaff&7] "));
                                channel.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Color.chat("&aAvailable channels:" +
                                        "\n&eGlobal" +
                                        "\n&cStaff &8- &7Current")).create()));
@@ -115,9 +129,6 @@ public class ChatWorker implements Listener {
                });
            });
         });
-
-        // todo change how chat works: set channel to player info db and check that.
-
     }
 
     private boolean detectedBadWord(Player player, String[] words) {
@@ -179,10 +190,3 @@ public class ChatWorker implements Listener {
     }
 
 }
-
-
-/*
-
-
-
- */

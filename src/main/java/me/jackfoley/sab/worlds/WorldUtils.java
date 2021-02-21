@@ -41,36 +41,34 @@ public class WorldUtils {
     }
 
     public static void setHubLocation(Location location, String name) {
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getPlugin(), () -> {
-            hubExists(name, exists -> {
-                if (!exists) {
-                    try (PreparedStatement st = Main.getSql().createStatement("INSERT INTO sab_hubs (X,Y,Z,YAW,PITCH,WORLD,NAME) VALUES (?,?,?,?,?,?,?)")) {
-                        st.setDouble(1, location.getX());
-                        st.setDouble(2, location.getY());
-                        st.setDouble(3, location.getZ());
-                        st.setFloat(4, location.getYaw());
-                        st.setFloat(5, location.getPitch());
-                        st.setString(6, location.getWorld().getName());
-                        st.setString(7, name);
-                        st.executeUpdate();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try (PreparedStatement st = Main.getSql().createStatement("UPDATE sab_hubs SET X = ?, Y = ?, Z = ?, YAW = ?, PITCH = ?, WORLD = ? WHERE NAME = ?")) {
-                        st.setDouble(1, location.getX());
-                        st.setDouble(2, location.getY());
-                        st.setDouble(3, location.getZ());
-                        st.setFloat(4, location.getYaw());
-                        st.setFloat(5, location.getPitch());
-                        st.setString(6, location.getWorld().getName());
-                        st.setString(7, name);
-                        st.executeUpdate();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+        hubExists(name, exists -> {
+            if (!exists) {
+                try (PreparedStatement st = Main.getSql().createStatement("INSERT INTO sab_hubs (X,Y,Z,YAW,PITCH,WORLD,NAME) VALUES (?,?,?,?,?,?,?)")) {
+                    st.setDouble(1, location.getX());
+                    st.setDouble(2, location.getY());
+                    st.setDouble(3, location.getZ());
+                    st.setFloat(4, location.getYaw());
+                    st.setFloat(5, location.getPitch());
+                    st.setString(6, location.getWorld().getName());
+                    st.setString(7, name);
+                    st.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-            });
+            } else {
+                try (PreparedStatement st = Main.getSql().createStatement("UPDATE sab_hubs SET X = ?, Y = ?, Z = ?, YAW = ?, PITCH = ?, WORLD = ? WHERE NAME = ?")) {
+                    st.setDouble(1, location.getX());
+                    st.setDouble(2, location.getY());
+                    st.setDouble(3, location.getZ());
+                    st.setFloat(4, location.getYaw());
+                    st.setFloat(5, location.getPitch());
+                    st.setString(6, location.getWorld().getName());
+                    st.setString(7, name);
+                    st.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         });
     }
 

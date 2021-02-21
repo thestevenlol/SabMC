@@ -17,8 +17,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class ReportCommand extends BaseCommand implements Listener {
@@ -113,7 +111,7 @@ public class ReportCommand extends BaseCommand implements Listener {
         switch (e.getCurrentItem().getType()) {
             case LIME_WOOL:
                 e.getWhoClicked().closeInventory();
-                ReportUtils.doReport((Player) e.getWhoClicked(), Bukkit.getOfflinePlayer(reportedUUID), Bukkit.getOfflinePlayer(reporterUUID));
+                ReportUtils.doReport((Player) e.getWhoClicked(), Bukkit.getOfflinePlayer(reporterUUID), Bukkit.getOfflinePlayer(reportedUUID));
                 break;
             case RED_WOOL:
                 e.getWhoClicked().closeInventory();

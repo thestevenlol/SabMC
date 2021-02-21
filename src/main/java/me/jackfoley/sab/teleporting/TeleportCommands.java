@@ -9,6 +9,7 @@ import me.jackfoley.sab.Main;
 import me.jackfoley.sab.playerinfo.PlayerInfoUtils;
 import me.jackfoley.sab.util.Color;
 import me.jackfoley.sab.util.Messages;
+import me.jackfoley.sab.util.PreventCheating;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -97,12 +98,16 @@ public class TeleportCommands extends BaseCommand {
                 return;
             }
 
+            if (PreventCheating.isFalling(player)) {
+                player.sendMessage(Color.chat(Messages.prefix + "&cYou cannot teleport while you are falling."));
+                return;
+            }
             player.teleport(target.getLocation());
         }
     }
 
     @CommandAlias("tpohere")
-    @CommandPermission("sab.tpo")
+    @CommandPermission("sab.tpohere")
     @CommandCompletion("@players")
     @Description("Force teleport to another player.")
     public void tpohere(Player player, String[] args) {
@@ -119,6 +124,10 @@ public class TeleportCommands extends BaseCommand {
                 return;
             }
 
+            if (PreventCheating.isFalling(target)) {
+                target.sendMessage(Color.chat(Messages.prefix + "&cYou cannot teleport while you are falling."));
+                return;
+            }
             target.teleport(player.getLocation());
         }
     }
@@ -221,12 +230,16 @@ public class TeleportCommands extends BaseCommand {
                                     if (!sender.isOnline()) {
                                         player.sendMessage(Color.chat(Messages.prefix + "&c" + sender.getName() + " is offline. Cancelling teleport."));
                                         TeleportUtils.closeTeleport(sender);
-                                        return;
+                                    } else {
+                                        if (PreventCheating.isFalling(sender.getPlayer())) {
+                                            sender.getPlayer().sendMessage(Color.chat(Messages.prefix + "&cYou cannot teleport while you are falling."));
+                                            return;
+                                        }
+                                        sender.getPlayer().teleport(player.getLocation());
+                                        TeleportUtils.closeTeleport(sender);
+                                        Main.getTimerMap().get(sender.getUniqueId()).cancel();
+                                        Main.getTimerMap().remove(sender.getUniqueId());
                                     }
-                                    sender.getPlayer().teleport(player.getLocation());
-                                    TeleportUtils.closeTeleport(sender);
-                                    Main.getTimerMap().get(sender.getUniqueId()).cancel();
-                                    Main.getTimerMap().remove(sender.getUniqueId());
                                 });
                                 break;
                             case TPAHERE:
@@ -235,6 +248,10 @@ public class TeleportCommands extends BaseCommand {
                                     if (!senders.isOnline()) {
                                         player.sendMessage(Color.chat(Messages.prefix + "&c" + senders.getName() + " is offline. Cancelling teleport."));
                                         TeleportUtils.closeTeleport(senders);
+                                        return;
+                                    }
+                                    if (PreventCheating.isFalling(player)) {
+                                        player.sendMessage(Color.chat(Messages.prefix + "&cYou cannot teleport while you are falling."));
                                         return;
                                     }
                                     player.teleport(senders.getPlayer().getLocation());

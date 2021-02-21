@@ -158,6 +158,25 @@ public class HomeCommands extends BaseCommand {
         }
     }
 
+    @CommandAlias("delhome")
+    public void delhome(Player player, String[] args) {
+        if (args.length == 0) {
+            player.sendMessage(Color.chat(Messages.prefix + "&c/delhome <home>"));
+        } else if (args.length == 1) {
+            String home = args[0];
+            HomeUtils.certainHomeExists(player, home, exists -> {
+                if (!exists) {
+                    player.sendMessage(Color.chat(Messages.prefix + "&cThe home \"" + home + "\" does not exist."));
+                    return;
+                }
+                HomeUtils.deleteHome(home, player);
+                player.sendMessage(Color.chat(Messages.prefix + "&7Home deleted."));
+            });
+        } else {
+            player.sendMessage(Color.chat(Messages.prefix + "&c/delhome <home>"));
+        }
+    }
+
     @HelpCommand
     @CatchUnknown
     @Default

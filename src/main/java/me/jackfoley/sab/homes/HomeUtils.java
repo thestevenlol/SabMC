@@ -19,6 +19,18 @@ public class HomeUtils {
         throw new IllegalAccessException();
     }
 
+    public static void deleteHome(String homeName, OfflinePlayer player) {
+        Bukkit.getScheduler().runTaskAsynchronously(Main.getPlugin(), () -> {
+           try (PreparedStatement st = Main.getSql().createStatement("DELETE FROM sab_homes WHERE PLAYERUUID = ? AND NAME = ?")) {
+               st.setString(1, player.getUniqueId().toString());
+               st.setString(2, homeName);
+               st.executeUpdate();
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }
+        });
+    }
+
     public static void hasAnyHomes(OfflinePlayer player, Callback<Boolean> callback) {
         Bukkit.getScheduler().runTaskAsynchronously(Main.getPlugin(), () -> {
             try (PreparedStatement st = Main.getSql().createStatement("SELECT * FROM sab_homes WHERE PLAYERUUID = ?")) {
